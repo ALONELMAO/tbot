@@ -5,7 +5,7 @@ from telegram.ext import Application, CommandHandler, MessageHandler, filters, C
 from flask import Flask, request
 
 # Your bot token from BotFather
-BOT_TOKEN = "7568240670:AAGmfu8r63g"
+BOT_TOKEN = "7568240670:AAHZzsk8rs6xe0kfL2phGf3-px-FxGCw4C4"
 
 # Flask app to keep bot running on Render
 app = Flask(__name__)
