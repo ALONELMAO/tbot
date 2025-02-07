@@ -1,0 +1,5 @@
+pyrogram
+tgcrypto
+selenium
+requests
+undetected-chromedriver
