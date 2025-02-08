@@ -1,13 +1,15 @@
 import os
-import requests
+import logging
 from telegram import Update
 from telegram.ext import Application, CommandHandler, MessageHandler, filters, CallbackContext
-from flask import Flask, request
+from flask import Flask
+import threading
 
-# Your bot token from BotFather
-BOT_TOKEN = "7568240670:AAHZzsk8rs6xe0kfL2phGf3-px-FxGCw4C4"
+# Enable logging
+logging.basicConfig(format='%(asctime)s - %(levelname)s - %(message)s', level=logging.INFO)
 
-# Flask app to keep bot running on Render
+BOT_TOKEN = os.getenv("BOT_TOKEN")  # Store bot token in Render environment variables
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -30,7 +32,7 @@ async def handle_message(update: Update, context: CallbackContext) -> None:
     # Placeholder for downloading logic
     await update.message.reply_text("⚠️ Direct download method not working yet!")
 
-def main():
+async def main():
     # Initialize bot application
     application = Application.builder().token(BOT_TOKEN).build()
 
@@ -39,7 +41,12 @@ def main():
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
 
     # Run the bot
-    application.run_polling()
+    await application.run_polling()
 
 if __name__ == "__main__":
-    main()
+    # Run Telegram bot in a separate thread
+    bot_thread = threading.Thread(target=lambda: asyncio.run(main()))
+    bot_thread.start()
+
+    # Run Flask app for Render Web Service
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
