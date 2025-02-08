@@ -4,3 +4,4 @@ undetected-chromedriver
 flask
 gunicorn
 python-telegram-bot
+webdriver-manager
